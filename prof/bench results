@@ -1,0 +1,24 @@
+commands:
+go test -c github.com/robzan8/gophics
+go test -bench=. -benchtime 20s -cpuprofile=prof/prof.out
+go tool pprof gophics.test prof/prof.out
+(pprof) web
+
+results:
+gophers.json
+
+only filling (read, xor, write) the mask byte per byte costs 3.47 ms
+
+naive: 17.0 milliseconds
+pointers: 14.8 // curve to be rendered passed around by reference
+optimized calc: 10.35 // refactor quad formula with clever trick, introdtto bugghetto in scanlineary e forse scanline
+samples64: 7.55 // fill non e` piu` bottleneck!
+inv quad interp: 5.07 // 6 tsteps, piu` preciso e piu` veloce di segmenti?!?
+segmnti: 6.88 // 6 tsteps
+segmenti aritmetica int: 2.85 // 2 tsteps
+
+bottlenecks:
+flag edge fa cagare!
+prova segmenti con aritmetica intera e inv quad con mega float pipeline
+bisogna tunare molto segmentazione a livello di cubic, inv quad e segmenti, forse gophers ha curve troppo fitte
+riscrivi initScan con qualche math func?
